@@ -3,14 +3,29 @@
   function dropboxDB(app_key) {
 
     var ds = null
-    var client = new Dropbox.CLient({key:app_key});
-    client.getDatastoreManager().openDefaultDatastore(function (error, datastore) {
-      if (error) {
-        error('Cannot open  default datastore, got error: ' + error);
-      } else {
-        ds = datastore;
-      }
-    });
+    setupDropbox();
+
+
+    function setupDropbox(){
+      var client = new Dropbox.Client({key:app_key});
+      client.authenticate(null, function(error) {
+      if(error)
+          error("Dropbox authentication error:" + error);
+        else
+          setupDatastore();
+      });
+    }
+
+    function setupDatastore(){
+      client.getDatastoreManager().openDefaultDatastore(function (error, datastore) {
+        if (error) {
+          error('Cannot open  default datastore, got error: ' + error);
+        } else {
+          ds = datastore;
+        }
+      });
+    }
+
     function drop() {}
 
     function tableCount() {
