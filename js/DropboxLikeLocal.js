@@ -3,7 +3,7 @@
   function dropboxDB(app_key) {
 
     var ds = null
-
+    var client = new Dropbox.CLient({key:app_key});
     client.getDatastoreManager().openDefaultDatastore(function (error, datastore) {
       if (error) {
         error('Cannot open  default datastore, got error: ' + error);
